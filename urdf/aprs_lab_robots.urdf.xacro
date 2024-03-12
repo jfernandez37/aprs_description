@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="aprs_lab_robots">
+
+  <link name="world"/>
+
+  <xacro:include filename="$(find aprs_description)/urdf/ur/aprs_ur_macro.xacro"/>
+
+    <!-- ROS2 Control Plugin -->
+  <xacro:arg name="controllers" default="$(find aprs_description)/config/robot_controllers.yaml" />
+
+  <xacro:aprs_ur
+    parent="world">
+  </xacro:aprs_ur>
+
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <ros>
+      </ros>
+      <parameters>$(arg controllers)</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>
+
