@@ -44,11 +44,44 @@ def launch_setup(context, *args, **kwargs):
                    '-name', 'ur',
                    '-allow_renaming', 'true'],
     )
+    
+    joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        name="joint_state_broadcaster_spawner",
+        arguments=["joint_state_broadcaster"],
+        parameters=[
+            {"use_sim_time": True},
+        ],
+    )
+    
+    ur_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        name="ur_controller_spawner",
+        arguments=["ur_joint_trajectory_controller"],
+        parameters=[
+            {"use_sim_time": True},
+        ],
+    )
+    
+    fanuc_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        name="fanuc_controller_spawner",
+        arguments=["fanuc_joint_trajectory_controller"],
+        parameters=[
+            {"use_sim_time": True},
+        ],
+    )
 
     nodes_to_start = [
         gz,
         robot_state_publisher_node,
-        gz_spawn_entity
+        gz_spawn_entity,
+        joint_state_broadcaster,
+        ur_controller,
+        fanuc_controller
     ]
 
     return nodes_to_start

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:macro name="aprs_franka">
+
+    <!-- Inclue franka robot macro -->
+    <!-- <xacro:include filename="$(find franka_description)/robots/common/franka_robot.xacro"/> -->
+
+    <xacro:include filename="$(find aprs_description)/urdf/franka/aprs_franka.ros2_control.xacro"/>
+
+    <xacro:property name="initial_positions_file" default="$(find aprs_description)/config/franka_initial_positions.yaml"/>
+
+    <xacro:include filename="$(find franka_description)/robots/common/franka_arm.xacro" />
+
+    <xacro:franka_arm 
+      arm_id="fr3"
+      gazebo="false"
+      joint_limits="${xacro.load_yaml('$(find franka_description)/robots/fr3/joint_limits.yaml')}"
+      inertials="${xacro.load_yaml('$(find franka_description)/robots/fr3/inertials.yaml')}"
+      kinematics="${xacro.load_yaml('$(find franka_description)/robots/fr3/kinematics.yaml')}"
+      dynamics="${xacro.load_yaml('$(find franka_description)/robots/fr3/dynamics.yaml')}"
+      connected_to="aprs_franka_base_link"
+    />
+
+    <!-- Run franka macro
+    <xacro:franka_robot 
+      arm_id="fr3"
+      joint_limits="${xacro.load_yaml('$(find franka_description)/robots/fr3/joint_limits.yaml')}"
+      inertials="${xacro.load_yaml('$(find franka_description)/robots/fr3/inertials.yaml')}"
+      kinematics="${xacro.load_yaml('$(find franka_description)/robots/fr3/kinematics.yaml')}"
+      dynamics="${xacro.load_yaml('$(find franka_description)/robots/fr3/dynamics.yaml')}"
+      hand="true"
+      robot_ip="0.0.0.0">
+    </xacro:franka_robot> -->
+
+    <!-- Run fanuc macro -->
+    <xacro:aprs_franka_ros2_control
+      name="franka"
+      initial_positions="${xacro.load_yaml(initial_positions_file)}">
+    </xacro:aprs_franka_ros2_control>
+
+  </xacro:macro>
+</robot>
